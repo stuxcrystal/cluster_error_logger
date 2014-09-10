@@ -1,4 +1,5 @@
-class CatchJsonParseErrors < ClusterErrorLogger
+class CatchJsonParseErrors
+	include ClusterErrorLogger
   def initialize(app)
     @app = app
   end
@@ -16,7 +17,7 @@ class CatchJsonParseErrors < ClusterErrorLogger
       env[ "action_dispatch.request.unsigned_session_cookie"].each do |key, val|
         infos << "\t\t#{key}: #{val}"
       end
-      Log.error infos.join("\n")
+      $log.error infos.join("\n")
       raise error
     end
   end

@@ -8,7 +8,7 @@ module ClusterErrorLogger
 	  infos << "Error raised when executing #{request.method} #{request.fullpath}"
 	  infos << "Exception trace: \n\t#{exception.backtrace.take(5).join("\n\t")}"
 	  infos << "\n\n"
-	  Log.error infos.join("\n")
+	  $log.error infos.join("\n")
 	  raise exception
 	end
 end
