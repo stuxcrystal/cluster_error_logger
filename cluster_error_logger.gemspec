@@ -7,9 +7,9 @@ require "cluster_error_logger/version"
 Gem::Specification.new do |s|
   s.name        = "cluster_error_logger"
   s.version     = ClusterErrorLogger::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
+  s.authors     = ["Ninigi"]
+  s.email       = ["fabian.zitter@gmail.com"]
+  s.homepage    = "none"
   s.summary     = "TODO: Summary of ClusterErrorLogger."
   s.description = "TODO: Description of ClusterErrorLogger."
 
