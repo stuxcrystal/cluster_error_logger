@@ -1,4 +1,4 @@
-require "error_logger"
+require_relative "error_logger"
 module ClusterErrorLogger
 	def log_error(exception)
 	  infos = []
