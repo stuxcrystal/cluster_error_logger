@@ -4,6 +4,6 @@ class ErrorLogger < Logger
 	end
 end
  
-logfile = File.open("/log/error.log", 'a') # create log file
+logfile = File.open("#{Rails.root}/log/error.log", 'a') # create log file
 logfile.sync = true # automatically flushes data to file
 Log = ErrorLogger.new(logfile) # constant accessible anywhere
