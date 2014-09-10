@@ -17,7 +17,6 @@ class CatchJsonParseErrors
         infos << "\t\t#{key}: #{val}"
       end
       Log.error infos.join("\n")
-      raise error
     end
   end
 end
