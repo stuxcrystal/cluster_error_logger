@@ -1,5 +1,5 @@
 require_relative "error_logger"
-require_relative "catch_jason_parse_errors"
+require_relative "catch_json_parse_errors"
 require_relative "railtie"
 
 module ClusterErrorLogger
