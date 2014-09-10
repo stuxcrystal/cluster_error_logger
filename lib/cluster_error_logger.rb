@@ -1,5 +1,5 @@
 require_relative "error_logger"
-require_relative "railtie" if defined?(Rails)
+require_relative "railtie"
 
 module ClusterErrorLogger
 	def log_error(exception)
