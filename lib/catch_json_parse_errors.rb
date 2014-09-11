@@ -1,5 +1,4 @@
 class CatchJsonParseErrors
-	include ClusterErrorLogger
   def initialize(app)
     @app = app
   end
