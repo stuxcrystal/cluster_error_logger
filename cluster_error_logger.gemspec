@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = ClusterErrorLogger::VERSION
   s.authors     = ["Ninigi"]
   s.email       = ["fabian.zitter@gmail.com"]
-  s.homepage    = "none"
+  s.homepage    = "https://github.com/Ninigi/cluster_error_logger"
   s.summary     = "A Logger for a multi-JSON-API one-App Cluster, supposed to log errors in a central log file."
   s.description = "Bundle the gem in the App gem file, make a folder called 'cluster_error_log' in its parent folder and you are ready to go."
 
