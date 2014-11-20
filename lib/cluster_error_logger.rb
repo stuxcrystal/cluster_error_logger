@@ -1,4 +1,5 @@
 require_relative "error_logger"
+require_relative "arbitrary_stuff_logger"
 require_relative "catch_json_parse_errors"
 require_relative "railtie"
 
