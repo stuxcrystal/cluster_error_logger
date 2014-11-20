@@ -13,6 +13,8 @@ module ClusterErrorLogger
 	end
 
   def log_error(*error_messages)
+    options = custom_infos.extract_options!
+
     infos = []
     infos << "Non-Exception Error raised when executing #{request.method} #{request.fullpath}"
     infos << "Error trace:"
@@ -20,16 +22,51 @@ module ClusterErrorLogger
       infos << "\t#{e_message}"
     end
     infos << "\n"
-    $log.error infos.join("\n")
+
+    if options[:write_to] && options[:write_to].to_sym == :info
+      $arb_log.error infos.join("\n")
+    else
+      $log.error infos.join("\n")
+    end
   end
 
   def log_info(*custom_infos)
-    infos = []
-    infos << "Triggered in #{request.method} #{request.fullpath}"
-    custom_infos.each do |message|
-      infos << "\t#{message}"
+    options = custom_infos.extract_options!
+    options[:development_only] ||= false
+    
+    if options[:development_only] && Rails.env != 'production'
+      infos = []
+      infos << "Triggered in #{request.method} #{request.fullpath}"
+      custom_infos.each do |message|
+        infos << "\t#{message}"
+      end
+      infos << "\n"
+
+      if options[:write_to] && options[:write_to].to_sym == :error
+        $log.error infos.join("\n")
+      else
+        $arb_log.info infos.join("\n")
+      end
     end
-    infos << "\n"
-    $log.info infos.join("\n")
+  end
+
+  def log_debug(*debug_infos)
+    options = debug_infos.extract_options!
+    options[:development_only] ||= true
+
+    if options[:development_only] && Rails.env != 'production'
+      infos = []
+      infos << "Triggered in wer wer"
+      debug_infos.each do |message|
+        infos << "\t#{message}"
+      end
+      infos << "\n"
+      
+      if options[:write_to] && options[:write_to].to_sym == :error
+        $log.error infos.join("\n")
+      else
+        $arb_log.info infos.join("\n")
+      end
+    end
   end
 end
