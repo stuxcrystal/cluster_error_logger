@@ -57,7 +57,7 @@ module ClusterErrorLogger
 
     if options[:development_only] && Rails.env != 'production'
       infos = []
-      infos << "Triggered in wer wer"
+      infos << "Triggered in #{request.method} #{request.fullpath}"
       debug_infos.each do |message|
         infos << "\t#{message}"
       end
