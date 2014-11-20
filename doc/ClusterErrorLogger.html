@@ -127,9 +127,10 @@ be to include into application_controller and rescue exceptions through
           
           <p>Writes a multi line error message to cluster_log/info.log (default). Per
 default it only logs for dev/test environment (can be changed via option
-hash). Takes an optional options hash (last argument)</p>
+hash). Takes an optional options hash (last argument). This should be your
+method of choise to log dev/test data only.</p>
 
-<h6 id="method-i-log_debug-label-Arguments">Arguments<span><a href="#method-i-log_debug-label-Arguments">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
+<h6 id="method-i-log_debug-label-Attributes">Attributes<span><a href="#method-i-log_debug-label-Attributes">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
 <ul><li>
 <p><code>debug_infos</code> - Strings containinig what you want to be logged,
 every argument will be in a seperate line</p>
@@ -138,21 +139,13 @@ every argument will be in a seperate line</p>
 <h6 id="method-i-log_debug-label-Options">Options<span><a href="#method-i-log_debug-label-Options">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
 
 <p>If the last argument is a hash, it will be considered the options hash.</p>
-<dl class="rdoc-list label-list"><dt>:write_to
-<dd><ul><li>
-<p><code>:error</code>, write to cluster_log/error.log instead of **/info.log.</p>
+<ul><li>
+<p><code>:write_to</code> - Determines in which logfile to write. Values:
+:error, nil</p>
 </li><li>
-<p><code>nil</code> write to default.</p>
+<p><code>:development_only</code> -  Boolean, will only log if set to true.
+Default: true</p>
 </li></ul>
-</dd><dt>:development_only
-<dd><ul><li>
-<p><code>true</code> only writes to log in dev or test environment.</p>
-</li><li>
-<p><code>false</code> always writes to log.</p>
-</li><li>
-<p>+Default: true+.</p>
-</li></ul>
-</dd></dl>
 
 <p>Go to <a href="ClusterErrorLogger.html#method-i-log_info">log_info</a> for
 example code</p>
@@ -161,7 +154,7 @@ example code</p>
 
           
           <div class="method-source-code" id="log_debug-source">
-            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 123</span>
+            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 117</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_debug</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">debug_infos</span>)
   <span class="ruby-identifier">options</span> = <span class="ruby-identifier">debug_infos</span>.<span class="ruby-identifier">extract_options!</span>
   <span class="ruby-identifier">options</span>[<span class="ruby-value">:development_only</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">true</span>
@@ -207,7 +200,7 @@ example code</p>
           <p>Writes a multi line error message to cluster_log/error.log (default). Takes
 an optional options hash (last argument)</p>
 
-<h6 id="method-i-log_error-label-Arguments">Arguments<span><a href="#method-i-log_error-label-Arguments">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
+<h6 id="method-i-log_error-label-Attributes">Attributes<span><a href="#method-i-log_error-label-Attributes">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
 <ul><li>
 <p><code>error_messages</code> - Strings containinig what you want to be
 logged, every argument will be in a seperate line</p>
@@ -216,13 +209,10 @@ logged, every argument will be in a seperate line</p>
 <h6 id="method-i-log_error-label-Options">Options<span><a href="#method-i-log_error-label-Options">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
 
 <p>If the last argument is a hash, it will be considered the options hash.</p>
-<dl class="rdoc-list label-list"><dt>:write_to
-<dd><ul><li>
-<p><code>:info</code> write to cluster_log/info.log instead of **/error.log.</p>
-</li><li>
-<p><code>nil</code> write to default.</p>
+<ul><li>
+<p><code>:write_to</code> - Determines in which logfile to write. Values:
+:info, nil</p>
 </li></ul>
-</dd></dl>
 
 <p>Go to <a href="ClusterErrorLogger.html#method-i-log_info">log_info</a> for
 example code</p>
@@ -231,7 +221,7 @@ example code</p>
 
           
           <div class="method-source-code" id="log_error-source">
-            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 41</span>
+            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 43</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_error</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">error_messages</span>)
   <span class="ruby-identifier">options</span> = <span class="ruby-identifier">custom_infos</span>.<span class="ruby-identifier">extract_options!</span>
 
@@ -272,7 +262,14 @@ example code</p>
 
         <div class="method-description">
           
-          <p>Writes the exception with trace (current depth: 5) to cluster_log/error.log</p>
+          <p>Writes the exception with trace (current depth: 5) to cluster_log/error.log
+and raises the error again</p>
+
+<h6 id="method-i-log_exception-label-Attributes">Attributes<span><a href="#method-i-log_exception-label-Attributes">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
+<ul><li>
+<p><code>exception</code> - Exception or anything inheriting from Exception,
+will be in the log output</p>
+</li></ul>
 
 <h6 id="method-i-log_exception-label-Examples">Examples<span><a href="#method-i-log_exception-label-Examples">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
 
@@ -286,7 +283,7 @@ example code</p>
 
           
           <div class="method-source-code" id="log_exception-source">
-            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 16</span>
+            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 20</span>
     <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_exception</span>(<span class="ruby-identifier">exception</span>)
       <span class="ruby-identifier">infos</span> = []
       <span class="ruby-identifier">infos</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Exception raised when executing #{request.method} #{request.fullpath}&quot;</span>
@@ -322,7 +319,7 @@ example code</p>
           <p>Writes a multi line error message to cluster_log/error.log (default). Takes
 an optional options hash (last argument)</p>
 
-<h6 id="method-i-log_info-label-Arguments">Arguments<span><a href="#method-i-log_info-label-Arguments">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
+<h6 id="method-i-log_info-label-Attributes">Attributes<span><a href="#method-i-log_info-label-Attributes">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
 <ul><li>
 <p><code>custom_infos</code> - Strings containinig what you want to be logged,
 every argument will be in a seperate line</p>
@@ -331,19 +328,13 @@ every argument will be in a seperate line</p>
 <h6 id="method-i-log_info-label-Options">Options<span><a href="#method-i-log_info-label-Options">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
 
 <p>If the last argument is a hash, it will be considered the options hash.</p>
-<dl class="rdoc-list label-list"><dt>:write_to
-<dd><ul><li>
-<p><code>:error</code> write to cluster_log/error.log instead of **/info.log.</p>
+<ul><li>
+<p><code>:write_to</code> - Determines in which logfile to write. Values:
+:error, nil</p>
 </li><li>
-<p><code>nil</code> write to default.</p>
+<p><code>:development_only</code> -  Boolean, will only log if set to true.
+Default: false</p>
 </li></ul>
-</dd><dt>:development_only
-<dd><ul><li>
-<p><code>true</code> only writes to log in dev or test environment.</p>
-</li><li>
-<p><code>false</code> always writes to log. +Default: false+</p>
-</li></ul>
-</dd></dl>
 
 <h6 id="method-i-log_info-label-Examples">Examples<span><a href="#method-i-log_info-label-Examples">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
 
@@ -358,7 +349,7 @@ every argument will be in a seperate line</p>
 
           
           <div class="method-source-code" id="log_info-source">
-            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 83</span>
+            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 81</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_info</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">custom_infos</span>)
   <span class="ruby-identifier">options</span> = <span class="ruby-identifier">custom_infos</span>.<span class="ruby-identifier">extract_options!</span>
   <span class="ruby-identifier">options</span>[<span class="ruby-value">:development_only</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">false</span>

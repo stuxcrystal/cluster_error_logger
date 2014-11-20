@@ -6,7 +6,11 @@ require_relative "railtie"
 ##
 # Use these Methods to log your errors to a central File. Best practice would be to include into application_controller and rescue exceptions through +:log_exception+
 module ClusterErrorLogger
-  # Writes the exception with trace (current depth: 5) to cluster_log/error.log
+  # Writes the exception with trace (current depth: 5) to cluster_log/error.log and raises the error again
+  #
+  # ====== Attributes
+  #
+  # * +exception+ - Exception or anything inheriting from Exception, will be in the log output
   #
   # ====== Examples
   #
@@ -26,16 +30,14 @@ module ClusterErrorLogger
   # Writes a multi line error message to cluster_log/error.log (default).
   # Takes an optional options hash (last argument)
   #
-  # ====== Arguments
+  # ====== Attributes
   # 
   # * +error_messages+ - Strings containinig what you want to be logged, every argument will be in a seperate line
   #
   # ====== Options
   #
   # If the last argument is a hash, it will be considered the options hash.
-  # [:write_to]  
-  #   * +:info+ write to cluster_log/info.log instead of **/error.log. 
-  #   * +nil+ write to default.
+  # * +:write_to+ - Determines in which logfile to write. Values: :info, nil
   #
   # Go to #log_info for example code
   def log_error(*error_messages)
@@ -59,19 +61,15 @@ module ClusterErrorLogger
   # Writes a multi line error message to cluster_log/error.log (default).
   # Takes an optional options hash (last argument)
   #
-  # ====== Arguments
+  # ====== Attributes
   # 
   # * +custom_infos+ - Strings containinig what you want to be logged, every argument will be in a seperate line
   #
   # ====== Options
   #
   # If the last argument is a hash, it will be considered the options hash.
-  # [:write_to]  
-  #   * +:error+ write to cluster_log/error.log instead of **/info.log. 
-  #   * +nil+ write to default.
-  # [:development_only]
-  #   * +true+ only writes to log in dev or test environment. 
-  #   * +false+ always writes to log. +Default: false+
+  # * +:write_to+ - Determines in which logfile to write. Values: :error, nil
+  # * +:development_only+ -  Boolean, will only log if set to true. Default: false
   #
   # ====== Examples
   #
@@ -102,22 +100,18 @@ module ClusterErrorLogger
 
   # Writes a multi line error message to cluster_log/info.log (default).
   # Per default it only logs for dev/test environment (can be changed via option hash).
-  # Takes an optional options hash (last argument)
+  # Takes an optional options hash (last argument).
+  # This should be your method of choise to log dev/test data only.
   #
-  # ====== Arguments
+  # ====== Attributes
   # 
   # * +debug_infos+ - Strings containinig what you want to be logged, every argument will be in a seperate line
   #
   # ====== Options
   #
   # If the last argument is a hash, it will be considered the options hash.
-  # [:write_to] 
-  #   * +:error+, write to cluster_log/error.log instead of **/info.log. 
-  #   * +nil+ write to default.
-  # [:development_only] 
-  #   * +true+ only writes to log in dev or test environment. 
-  #   * +false+ always writes to log. 
-  #   * +Default: true+.
+  # * +:write_to+ - Determines in which logfile to write. Values: :error, nil
+  # * +:development_only+ -  Boolean, will only log if set to true. Default: true
   #
   # Go to #log_info for example code
   def log_debug(*debug_infos)
