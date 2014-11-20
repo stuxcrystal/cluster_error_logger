@@ -161,7 +161,7 @@ example code</p>
 
           
           <div class="method-source-code" id="log_debug-source">
-            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 117</span>
+            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 123</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_debug</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">debug_infos</span>)
   <span class="ruby-identifier">options</span> = <span class="ruby-identifier">debug_infos</span>.<span class="ruby-identifier">extract_options!</span>
   <span class="ruby-identifier">options</span>[<span class="ruby-value">:development_only</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">true</span>
@@ -231,7 +231,7 @@ example code</p>
 
           
           <div class="method-source-code" id="log_error-source">
-            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 35</span>
+            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 41</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_error</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">error_messages</span>)
   <span class="ruby-identifier">options</span> = <span class="ruby-identifier">custom_infos</span>.<span class="ruby-identifier">extract_options!</span>
 
@@ -273,12 +273,20 @@ example code</p>
         <div class="method-description">
           
           <p>Writes the exception with trace (current depth: 5) to cluster_log/error.log</p>
+
+<h6 id="method-i-log_exception-label-Examples">Examples<span><a href="#method-i-log_exception-label-Examples">&para;</a> <a href="#documentation">&uarr;</a></span></h6>
+
+<p>in application_controller.rb</p>
+
+<pre class="ruby"><span class="ruby-identifier">include</span> <span class="ruby-constant">ClusterErrorLogger</span>
+<span class="ruby-identifier">rescue_from</span> <span class="ruby-constant">Exception</span>, :<span class="ruby-identifier">with</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">log_exception</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="log_exception-source">
-            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 10</span>
+            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 16</span>
     <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_exception</span>(<span class="ruby-identifier">exception</span>)
       <span class="ruby-identifier">infos</span> = []
       <span class="ruby-identifier">infos</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Exception raised when executing #{request.method} #{request.fullpath}&quot;</span>
@@ -350,7 +358,7 @@ every argument will be in a seperate line</p>
 
           
           <div class="method-source-code" id="log_info-source">
-            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 77</span>
+            <pre><span class="ruby-comment"># File lib/cluster_error_logger.rb, line 83</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_info</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">custom_infos</span>)
   <span class="ruby-identifier">options</span> = <span class="ruby-identifier">custom_infos</span>.<span class="ruby-identifier">extract_options!</span>
   <span class="ruby-identifier">options</span>[<span class="ruby-value">:development_only</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">false</span>

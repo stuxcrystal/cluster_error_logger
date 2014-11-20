@@ -7,6 +7,12 @@ require_relative "railtie"
 # Use these Methods to log your errors to a central File. Best practice would be to include into application_controller and rescue exceptions through +:log_exception+
 module ClusterErrorLogger
   # Writes the exception with trace (current depth: 5) to cluster_log/error.log
+  #
+  # ====== Examples
+  #
+  # in application_controller.rb
+  #   include ClusterErrorLogger
+  #   rescue_from Exception, :with => :log_exception
 	def log_exception(exception)
 	  infos = []
 	  infos << "Exception raised when executing #{request.method} #{request.fullpath}"
