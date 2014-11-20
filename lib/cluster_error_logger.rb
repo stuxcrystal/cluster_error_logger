@@ -22,4 +22,14 @@ module ClusterErrorLogger
     infos << "\n\n"
     $log.error infos.join("\n")
   end
+
+  def log_info(*custom_infos)
+    infos = []
+    infos << "Triggered in #{request.method} #{request.fullpath}"
+    custom_infos.each do |message|
+      infos << "\n\t#{message}"
+    end
+    infos << "\n\n"
+    $log.info infos.join("\n")
+  end
 end
