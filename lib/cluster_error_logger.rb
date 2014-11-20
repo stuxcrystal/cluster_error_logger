@@ -6,7 +6,8 @@ require_relative "railtie"
 module ClusterErrorLogger
 	def log_exception(exception)
 	  infos = []
-	  infos << "Error raised when executing #{request.method} #{request.fullpath}"
+	  infos << "Exception raised when executing #{request.method} #{request.fullpath}"
+    infos << "#{exception}"
 	  infos << "Exception trace: \n\t#{exception.backtrace.take(5).join("\n\t")}"
 	  infos << "\n\n"
 	  $log.error infos.join("\n")
