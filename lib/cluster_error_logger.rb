@@ -10,7 +10,7 @@ module ClusterErrorLogger
   include GemConfig::Base
 
   with_configuration do
-    has :log_dir, :classes => String, :default => File.expand_path("#{Rails.root}/../../cluster_log/error.log")
+    has :log_dir, :classes => String, :default => File.expand_path("#{Rails.root}/../../cluster_log")
   end
 
   # Writes the exception with trace (current depth: 5) to cluster_log/error.log and raises the error again
