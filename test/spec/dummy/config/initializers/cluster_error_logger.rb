@@ -1,0 +1,1 @@
+ClusterErrorLogger.configuration.log_dir = "#{Rails.root}/cluster_log/error.log"

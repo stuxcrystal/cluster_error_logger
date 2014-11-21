@@ -54,6 +54,8 @@ module Dummy
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    ClusterErrorLogger.configuration.log_dir = ClusterErrorLogger.configuration.log_dir = "#{Rails.root}/../cluster_log/error.log"
   end
 end
 
