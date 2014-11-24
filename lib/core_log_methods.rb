@@ -13,9 +13,7 @@ def log_exception(exception)
   infos = []
   infos << "Exception raised when executing #{request.method} #{request.fullpath}"
   infos << "#{exception}"
-  caller.each do |c|
-    infos << "#{c}\n"
-  end
+  include_trace_to infos
   infos << "Exception trace (depth: 5): \n\t#{exception.backtrace.take(5).join("\n\t")}"
   infos << "\n\n"
   $log.error infos.join("\n")
@@ -44,9 +42,7 @@ def log_error(*error_messages)
     infos << "\t#{e_message}"
   end
   infos << "Error trace:"
-  caller.each do |c|
-    infos << "#{c}\n"
-  end
+  include_trace_to info
   infos << "\n"
 
   if options[:write_to] && options[:write_to].to_sym == :info
@@ -82,12 +78,7 @@ def log_info(*custom_infos)
   
   if options[:development_only]
     if Rails.env != "production"
-      infos = []
-      infos << "Triggered in #{request.method} #{request.fullpath}"
-      custom_infos.each do |message|
-        infos << "\t#{message}"
-      end
-      infos << "\n"
+      infos = create_info_log custom_infos
 
       if options[:write_to] && options[:write_to].to_sym == :error
         $log.error infos.join("\n")
@@ -142,14 +133,23 @@ def log_debug(*debug_infos)
 end
 
 private
-  def create_info_log_string
+  def create_info_log_string(messages)
     infos = []
-    infos << "Triggered in #{request.method} #{request.fullpath}" if defined? request
-    caller[1..5].each do |c|
-      infos << "\t#{c}"
-    end
-    debug_infos.each do |message|
+    infos << "Triggered in:"
+    infos << "#{request.method} #{request.fullpath}" if defined? request
+    include_trace_to infos
+    infos << "Message:"
+    messages.each do |message|
       infos << "\t#{message}"
     end
     infos << "\n"
+  end
+
+  def include_trace_to(log_string)
+    logger_is_caller_regex = /gems\/cluster_error_logger-\d+/
+    caller[0..5].each do |c|
+      unless c.nil?
+        log_string << "\t#{c}" unless logger_is_caller_regex.match c
+      end
+    end
   end
