@@ -89,7 +89,22 @@ module ClusterErrorLogger
     options = custom_infos.extract_options!
     options[:development_only] ||= false
     
-    if options[:development_only] && Rails.env != 'production'
+    if options[:development_only]
+      if Rails.env != "production"
+        infos = []
+        infos << "Triggered in #{request.method} #{request.fullpath}"
+        custom_infos.each do |message|
+          infos << "\t#{message}"
+        end
+        infos << "\n"
+
+        if options[:write_to] && options[:write_to].to_sym == :error
+          $log.error infos.join("\n")
+        else
+          $arb_log.info infos.join("\n")
+        end
+      end
+    else
       infos = []
       infos << "Triggered in #{request.method} #{request.fullpath}"
       custom_infos.each do |message|
@@ -125,7 +140,22 @@ module ClusterErrorLogger
     options = debug_infos.extract_options!
     options[:development_only] ||= true
 
-    if options[:development_only] && Rails.env != 'production'
+    if options[:development_only]
+      if Rails.env != 'production'
+        infos = []
+        infos << "Triggered in #{request.method} #{request.fullpath}"
+        debug_infos.each do |message|
+          infos << "\t#{message}"
+        end
+        infos << "\n"
+        
+        if options[:write_to] && options[:write_to].to_sym == :error
+          $log.error infos.join("\n")
+        else
+          $arb_log.info infos.join("\n")
+        end
+      end
+    else
       infos = []
       infos << "Triggered in #{request.method} #{request.fullpath}"
       debug_infos.each do |message|
