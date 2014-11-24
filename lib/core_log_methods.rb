@@ -13,7 +13,10 @@ def log_exception(exception)
   infos = []
   infos << "Exception raised when executing #{request.method} #{request.fullpath}"
   infos << "#{exception}"
-  infos << "Exception trace: \n\t#{exception.backtrace.take(5).join("\n\t")}"
+  caller.each do |c|
+    infos << "#{c}\n"
+  end
+  infos << "Exception trace (depth: 5): \n\t#{exception.backtrace.take(5).join("\n\t")}"
   infos << "\n\n"
   $log.error infos.join("\n")
   raise exception
@@ -37,9 +40,12 @@ def log_error(*error_messages)
 
   infos = []
   infos << "Non-Exception Error raised when executing #{request.method} #{request.fullpath}"
-  infos << "Error trace:"
   error_messages.each do |e_message|
     infos << "\t#{e_message}"
+  end
+  infos << "Error trace:"
+  caller.each do |c|
+    infos << "#{c}\n"
   end
   infos << "\n"
 
@@ -90,12 +96,7 @@ def log_info(*custom_infos)
       end
     end
   else
-    infos = []
-    infos << "Triggered in #{request.method} #{request.fullpath}"
-    custom_infos.each do |message|
-      infos << "\t#{message}"
-    end
-    infos << "\n"
+    infos = create_info_log_string custom_infos
 
     if options[:write_to] && options[:write_to].to_sym == :error
       $log.error infos.join("\n")
@@ -127,31 +128,28 @@ def log_debug(*debug_infos)
 
   if options[:development_only]
     if Rails.env != 'production'
-      infos = []
-      infos << "Triggered in #{request.method} #{request.fullpath}"
-      debug_infos.each do |message|
-        infos << "\t#{message}"
-      end
-      infos << "\n"
-      
-      if options[:write_to] && options[:write_to].to_sym == :error
-        $log.error infos.join("\n")
-      else
-        $arb_log.info infos.join("\n")
-      end
+      infos = create_info_log_string debug_infos
     end
   else
+    infos = create_info_log debug_infos
+  end
+
+  if options[:write_to] && options[:write_to].to_sym == :error
+    $log.error infos.join("\n")
+  else
+    $arb_log.info infos.join("\n")
+  end
+end
+
+private
+  def create_info_log_string
     infos = []
-    infos << "Triggered in #{request.method} #{request.fullpath}"
+    infos << "Triggered in #{request.method} #{request.fullpath}" if defined? request
+    caller[1..5].each do |c|
+      infos << "\t#{c}"
+    end
     debug_infos.each do |message|
       infos << "\t#{message}"
     end
     infos << "\n"
-    
-    if options[:write_to] && options[:write_to].to_sym == :error
-      $log.error infos.join("\n")
-    else
-      $arb_log.info infos.join("\n")
-    end
   end
-end
