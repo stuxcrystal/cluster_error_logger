@@ -12,7 +12,7 @@ module ClusterErrorLogger
   include GemConfig::Base
 
   with_configuration do
-    FileUtils.mkdir_p "#{Rails.root}/../../cluster_log"
+    FileUtils.mkdir_p File.expand_path("#{Rails.root}/../../cluster_log")
     has :log_dir, :classes => String, :default => File.expand_path("#{Rails.root}/../../cluster_log")
   end
 end
