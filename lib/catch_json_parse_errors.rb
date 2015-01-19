@@ -12,10 +12,6 @@ class CatchJsonParseErrors
       env['rack.session'].each do |key, val|
         infos << "\t\t#{key}: #{val}"
       end
-      infos << "\tCookies"
-      env[ "action_dispatch.request.unsigned_session_cookie"].each do |key, val|
-        infos << "\t\t#{key}: #{val}"
-      end
       $log.error infos.join("\n")
       raise error
     end
