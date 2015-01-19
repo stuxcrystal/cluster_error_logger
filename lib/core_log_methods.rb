@@ -37,7 +37,7 @@ def log_error(*error_messages)
   options = custom_infos.extract_options!
 
   infos = []
-  infos << "Non-Exception Error raised when executing #{request.method} #{request.fullpath}"
+  infos << "Non-Exception Error raised when executing #{request.method} #{request.fullpath}" if defined? request
   error_messages.each do |e_message|
     infos << "\t#{e_message}"
   end
